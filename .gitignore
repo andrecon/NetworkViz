@@ -2,3 +2,5 @@
 .smallFlows.pcap.icloud
 .vscode/
 venv/
+temp-plot*
+.temp-plot.html*

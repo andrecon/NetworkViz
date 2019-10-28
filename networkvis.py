@@ -9,8 +9,12 @@ packets = sniff(count=100)
 wrpcap('foo.pcap',packets)
 
 packets = rdpcap('foo.pcap')
-# if IP in packets:
-#     print(packets[IP].src)
+
+print("Sources")
+for packet in packets:
+    print(packet[IP].src)
+#if IP in packets:
+#    print(packets[IP].src)
 
 srcIP=[]
 for pkt in packets:
