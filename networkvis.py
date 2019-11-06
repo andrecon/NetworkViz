@@ -1,10 +1,10 @@
 from scapy.all import *
 from collections import Counter
 import plotly
-# from prettytable import PrettyTable
-# from scapy.all import wrpcap, Ether, IP, UDP
 
+print("Sniffing...")
 packets = sniff(count=100)
+print("Done...")
 
 wrpcap('foo.pcap',packets)
 
@@ -12,9 +12,10 @@ packets = rdpcap('foo.pcap')
 
 print("Sources")
 for packet in packets:
-    print(packet[IP].src)
-#if IP in packets:
-#    print(packets[IP].src)
+    try:
+        print(packet[IP].src)
+    except:
+        pass
 
 srcIP=[]
 for pkt in packets:
@@ -28,13 +29,6 @@ cnt=Counter()
 
 for ip in srcIP:
     cnt[ip] += 1
-
-# table= PrettyTable(["IP", "Count"])
-
-# for ip, count in cnt.most_common():
-#    table.add_row([ip, count])
-
-# print(table)
 
 xData=[]
 yData=[]
