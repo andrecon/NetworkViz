@@ -4,3 +4,6 @@
 venv/
 temp-plot*
 .temp-plot.html*
+*.swp
+*.icloud
+*.pcap
