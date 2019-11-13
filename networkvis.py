@@ -5,6 +5,12 @@ import plotly.offline
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
+import os
+from datetime import date
+
+if not os.path.exists("images"):
+    os.mkdir("images")
+
 print("Sniffing...")
 packets = sniff(count=100)
 print("Done...")
@@ -21,32 +27,41 @@ for packet in packets:
         pass
 
 srcIP=[]
+dstIP=[]
 for pkt in packets:
     if IP in pkt:
         try:
                 srcIP.append(pkt[IP].src)
         except:
             pass
+        try:
+                dstIP.append(pkt[IP].dst)
+        except:
+            pass
 
-cnt=Counter()
+
+srcCnt=Counter()
+dstCnt=Counter()
 
 for ip in srcIP:
-    cnt[ip] += 1
+    srcCnt[ip] += 1
 
-xData=[]
-yData=[]
-for ip, count in cnt.most_common():
-    xData.append(ip)
-    yData.append(count)
+for ip in dstIP:
+    dstCnt[ip] += 1
 
-# plotly.offline.plot(
-#     {
-#         "data":[plotly.graph_objs.Bar(x=xData, y=yData)], 
-#         "layout":plotly.graph_objs.Layout(title="Source IP Occurrence",
-#         xaxis=dict(title="SRC IP"),
-#         yaxis=dict(title="Count"))
-#     }
-#     )
+
+srcXData=[]
+srcYData=[]
+for ip, count in srcCnt.most_common():
+    srcXData.append(ip)
+    srcYData.append(count)
+
+dstXData=[]
+dstYData=[]
+for ip, count in dstCnt.most_common():
+    dstXData.append(ip)
+    dstYData.append(count)
+
 
 fig = make_subplots(
     rows=2, cols=2,
@@ -54,15 +69,18 @@ fig = make_subplots(
     )
 
 
-fig.add_trace( go.Bar(x=xData, y=yData, name="Source"),
+fig.add_trace( go.Bar(x=srcXData, y=srcYData, name="Source"),
         row=1, col=1,
         )   
 
 fig.add_trace(
-        go.Bar(x=xData, y=yData, name="Destination"), 
+        go.Bar(x=dstXData, y=dstYData, name="Destination"), 
         row=1, col=2,
         )
 
 fig.update_layout(height=1300, width=1300, title_text="Network Visualization")
 fig.show()
+
+now = date.today()
+fig.write_image("images/"+ str(now) + ".webp")
 

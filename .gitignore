@@ -7,3 +7,5 @@ temp-plot*
 *.swp
 *.icloud
 *.pcap
+.DS_Store
+images/
