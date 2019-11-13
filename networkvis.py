@@ -6,7 +6,7 @@ import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
 import os
-from datetime import date
+import time
 
 if not os.path.exists("images"):
     os.mkdir("images")
@@ -32,6 +32,11 @@ for pkt in packets:
         except:
             pass
 
+topSrc=Counter(srcIP).most_common(3)
+topDst=Counter(dstIP).most_common(3)
+
+print(topSrc)
+print(topDst)
 
 srcCnt=Counter()
 dstCnt=Counter()
@@ -71,9 +76,12 @@ fig.add_trace(
         row=1, col=2,
         )
 
+
 fig.update_layout(height=1300, width=1300, title_text="Network Visualization")
 fig.show()
 
-now = date.today()
-fig.write_image("images/"+ str(now) + ".webp")
+
+
+now = time.strftime("%m%d-%H%M%S")
+fig.write_image("images/"+ now + ".pdf")
 
