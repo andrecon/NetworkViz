@@ -19,13 +19,6 @@ wrpcap('foo.pcap',packets)
 
 packets = rdpcap('foo.pcap')
 
-print("Sources")
-for packet in packets:
-    try:
-        print(packet[IP].src)
-    except:
-        pass
-
 srcIP=[]
 dstIP=[]
 for pkt in packets:
@@ -65,7 +58,7 @@ for ip, count in dstCnt.most_common():
 
 fig = make_subplots(
     rows=2, cols=2,
-    subplot_titles=("Number of Packets for Source", "Number of Packets for Destination")
+    subplot_titles=("Number of Packets to Host", "Number of Packets from Host")
     )
 
 
