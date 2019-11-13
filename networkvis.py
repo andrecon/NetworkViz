@@ -8,6 +8,13 @@ from plotly.subplots import make_subplots
 import os
 from datetime import date
 
+# import dns.reversename
+
+# n = dns.reversename.from_address("207.223.160.0")
+# print(n)
+import socket
+
+
 if not os.path.exists("images"):
     os.mkdir("images")
 
@@ -24,11 +31,22 @@ dstIP=[]
 for pkt in packets:
     if IP in pkt:
         try:
-                srcIP.append(pkt[IP].src)
+                srcdata = socket.gethostbyaddr(pkt[IP].src)
+                tmp = socket.gethostbyaddr(pkt[IP].src)
+                scrap = tmp[0].split(".")[0]
+                info = (srcdata[0].strip(scrap)).strip('.')
+                # srcIP.append(pkt[IP].src)
+                srcIP.append(info)
         except:
             pass
         try:
-                dstIP.append(pkt[IP].dst)
+                dstdata = socket.gethostbyaddr(pkt[IP].dst)
+                tmp = socket.gethostbyaddr(pkt[IP].dst)
+                scrap = tmp[0].split(".")[0]
+                info = (dstdata[0].strip(scrap)).strip('.')
+                # print(dstdata.strip(scrap))
+                # dstIP.append(pkt[IP].dst)
+                dstIP.append(info)
         except:
             pass
 
