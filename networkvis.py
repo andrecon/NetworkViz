@@ -15,13 +15,14 @@ import time
 # print(n)
 import socket
 
-def _sniff():
+def _sniff(num):
     if not os.path.exists("images"):
         os.mkdir("images")
 
     print("Sniffing...")
-    packets = sniff(count=100)
+    packets = sniff(count=num)
     print("Done...")
+    print(num)
 
     wrpcap('foo.pcap',packets)
 
@@ -100,9 +101,9 @@ def _sniff():
     fig.show()
 
 
-now = time.strftime("%m%d-%H%M%S")
-fig.write_image("images/"+ now + ".pdf")
-fig.write_image("images/fig1.webp")
+    now = time.strftime("%m%d-%H%M%S")
+    fig.write_image("images/"+ now + ".pdf")
+    fig.write_image("images/fig1.webp")
 
 
 if __name__ == '__main__':
@@ -112,6 +113,11 @@ if __name__ == '__main__':
     # root.geometry("500x500+%d+%d" % (x, y))
     root.geometry("500x500+400+400")
     root.title = ('NetworkViz')
-    b1 = tk.Button(root,text = 'Button', command=_sniff)
-    b1.pack()
+    ent = tk.Entry(root)
+    ent.pack()
+    ent.insert(0, "100")
+    num = ent.get()
+    myInt = int(num)
+    b1 = tk.Button(root,text = 'Button', command=(lambda e=myInt: _sniff(e)))
+    b1.pack(padx=5, pady=5)
     root.mainloop()
