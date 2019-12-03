@@ -107,6 +107,10 @@ fig.write_image("images/fig1.webp")
 
 if __name__ == '__main__':
     root = tk.Tk()
+    x = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2
+    y = (root.winfo_screenheight() - root.winfo_reqheight()) / 2
+    # root.geometry("500x500+%d+%d" % (x, y))
+    root.geometry("500x500+400+400")
     root.title = ('NetworkViz')
     b1 = tk.Button(root,text = 'Button')
     b1.pack()
