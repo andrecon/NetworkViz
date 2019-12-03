@@ -102,4 +102,5 @@ fig.show()
 
 now = time.strftime("%m%d-%H%M%S")
 fig.write_image("images/"+ now + ".pdf")
+fig.write_image("images/fig1.webp")
 
