@@ -4,6 +4,7 @@ import plotly
 import plotly.offline
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
+import tkinter as tk
 
 import os
 import time
@@ -104,3 +105,9 @@ now = time.strftime("%m%d-%H%M%S")
 fig.write_image("images/"+ now + ".pdf")
 fig.write_image("images/fig1.webp")
 
+if __name__ == '__main__':
+    root = tk.Tk()
+    root.title = ('NetworkViz')
+    b1 = tk.Button(root,text = 'Button')
+    b1.pack()
+    root.mainloop()
