@@ -15,12 +15,17 @@ import time
 # print(n)
 import socket
 
-def _sniff(num):
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+def _sniff(stringInt, root):
     if not os.path.exists("images"):
         os.mkdir("images")
 
     print("Sniffing...")
+    num = int(stringInt.get())
     packets = sniff(count=num)
+
+    # packets = sniff(count=num)
     print("Done...")
     print(num)
 
@@ -40,7 +45,8 @@ def _sniff(num):
                 # srcIP.append(pkt[IP].src)
                 srcIP.append(info)
             except:
-                 pass
+                print("Passing")
+                pass
             try:
                 dstdata = socket.gethostbyaddr(pkt[IP].dst)
                 tmp = socket.gethostbyaddr(pkt[IP].dst)
@@ -50,6 +56,7 @@ def _sniff(num):
                 # dstIP.append(pkt[IP].dst)
                 dstIP.append(info)
             except:
+                print("Passing")
                 pass
 
     topSrc=Counter(srcIP).most_common(3)
@@ -83,7 +90,7 @@ def _sniff(num):
 
     fig = make_subplots(
             rows=2, cols=2,
-            subplot_titles=("Number of Packets to Host", "Number of Packets from Host")
+            subplot_titles=("Incomming", "Outgoing")
           )
 
 
@@ -96,6 +103,8 @@ def _sniff(num):
             row=1, col=2,
         )
 
+    # chart_type = FigureCanvasTkAgg(fig,root)
+    # chart_type.get_tk_widget().pack()
 
     fig.update_layout(height=1300, width=1300, title_text="Network Visualization")
     fig.show()
@@ -108,6 +117,7 @@ def _sniff(num):
 
 if __name__ == '__main__':
     root = tk.Tk()
+    # root.configure(background='black')
     x = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2
     y = (root.winfo_screenheight() - root.winfo_reqheight()) / 2
     # root.geometry("500x500+%d+%d" % (x, y))
@@ -115,9 +125,6 @@ if __name__ == '__main__':
     root.title = ('NetworkViz')
     ent = tk.Entry(root)
     ent.pack()
-    ent.insert(0, "100")
-    num = ent.get()
-    myInt = int(num)
-    b1 = tk.Button(root,text = 'Button', command=(lambda e=myInt: _sniff(e)))
-    b1.pack(padx=5, pady=5)
+    b1 = tk.Button(root,text = 'Sniff', command=(lambda e=ent: _sniff(e,root)))
+    b1.pack()
     root.mainloop()
