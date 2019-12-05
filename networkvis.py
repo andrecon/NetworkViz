@@ -86,9 +86,9 @@ def _sniff(stringInt, root):
     if(len(topDst) == 1):
          topDstMessage= str(topDst[0][0])
     if(len(topSrc) == 0):
-         topSrcMessage= "No IP Incoming  captures [might not be IPv4, Try Again]"
+         topSrcMessage= "No Incoming IP packets [might not be IPv4, Try Again]"
     if(len(topDst) == 0):
-         topDstMessage= "No IP Outgoing captures [might not be IPv4, Try Again]"
+         topDstMessage= "No Outgoing IP packets [might not be IPv4, Try Again]"
 
     l1 = tk.Label(root,text = 'Top IP Incoming: ')
     l1.pack()
@@ -150,7 +150,7 @@ def _sniff(stringInt, root):
     pop = ax.bar(srcXData, srcYData)
     ax.set_ylabel('Number of Packets')
     # ax.xticks(srcIP,srcIP)
-    ax.set_xticklabels(srcIP, fontdict=None, minor=False)
+    #ax.set_xticklabels(srcIP, fontdict=None, minor=False, rotation="vertical")
 
     #The below code will create the second plot.
     ax2 = fig.add_subplot(212)
@@ -158,7 +158,7 @@ def _sniff(stringInt, root):
     gdp = ax2.bar(dstXData, dstYData)
     ax2.set_ylabel('Number of Packets')
     # ax2.xticks(dstIP, dstIP)
-    ax2.set_xticklabels(dstIP, fontdict=None, minor=False)
+    #ax2.set_xticklabels(dstIP, fontdict=None, minor=False, rotation="vertical")
 
 
     chart_type = FigureCanvasTkAgg(fig,root)
@@ -193,6 +193,8 @@ def _sniff(stringInt, root):
     fig.write_image("images/"+ now + ".pdf")
     fig.write_image("images/fig1.webp")
 
+def exit(event):
+    root.destroy()
 
 if __name__ == '__main__':
     root = tk.Tk()
@@ -210,8 +212,10 @@ if __name__ == '__main__':
     ent.pack()
     b1 = tk.Button(root,text = 'Sniff', command=(lambda e=ent: _sniff(e,root)))
     b1.pack()
+#    root.bind('<Return>', (lambda e=ent: _sniff(e,root)))
     b3 = tk.Button(root, text='Quit', command=root.quit)
     b3.pack()
+    root.bind('<Escape>', exit)
 
 
     root.mainloop()
