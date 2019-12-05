@@ -15,7 +15,9 @@ import time
 # print(n)
 import socket
 
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+# import matplotlib.pyplot as plt
+# import numpy as np
 
 def _sniff(stringInt, root):
     if not os.path.exists("images"):
@@ -87,6 +89,14 @@ def _sniff(stringInt, root):
         dstXData.append(ip)
         dstYData.append(count)
 
+    # fig, ax = plt.subplots()
+    # ax.plot(srcXData, srcYData)
+    # ax.set_title('Source')
+
+    # fig, axs = plt.subplots(2)
+    # fig.suptitle('Destination')
+    # axs[0].plot(x, y)
+    # axs[1].plot(x, -y)
 
     fig = make_subplots(
             rows=2, cols=2,
@@ -118,6 +128,10 @@ def _sniff(stringInt, root):
 if __name__ == '__main__':
     root = tk.Tk()
     # root.configure(background='black')
+
+
+    w = tk.Label(root, text="Enter the number of packets that you want to sniff.")
+    w.pack()
     x = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2
     y = (root.winfo_screenheight() - root.winfo_reqheight()) / 2
     # root.geometry("500x500+%d+%d" % (x, y))
@@ -127,4 +141,6 @@ if __name__ == '__main__':
     ent.pack()
     b1 = tk.Button(root,text = 'Sniff', command=(lambda e=ent: _sniff(e,root)))
     b1.pack()
+
+
     root.mainloop()
