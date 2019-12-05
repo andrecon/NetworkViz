@@ -151,6 +151,7 @@ def _sniff(stringInt, root):
     ax.set_ylabel('Number of Packets')
     # ax.xticks(srcIP,srcIP)
     #ax.set_xticklabels(srcIP, fontdict=None, minor=False, rotation="vertical")
+    ax.set_xticklabels([])
 
     #The below code will create the second plot.
     ax2 = fig.add_subplot(212)
@@ -159,6 +160,7 @@ def _sniff(stringInt, root):
     ax2.set_ylabel('Number of Packets')
     # ax2.xticks(dstIP, dstIP)
     #ax2.set_xticklabels(dstIP, fontdict=None, minor=False, rotation="vertical")
+    ax2.set_xticklabels([])
 
 
     chart_type = FigureCanvasTkAgg(fig,root)
@@ -198,6 +200,7 @@ def exit(event):
 
 if __name__ == '__main__':
     root = tk.Tk()
+    root.title('NetworkViz')
     # root.configure(background='black')
 
 
@@ -207,7 +210,6 @@ if __name__ == '__main__':
    # y = (root.winfo_screenheight() - root.winfo_reqheight()) / 2
     # root.geometry("500x500+%d+%d" % (x, y))
    # root.geometry("500x500+400+400")
-    root.title = ('NetworkViz')
     ent = tk.Entry(root)
     ent.pack()
     b1 = tk.Button(root,text = 'Sniff', command=(lambda e=ent: _sniff(e,root)))
