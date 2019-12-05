@@ -22,6 +22,9 @@ import numpy as np
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+def _show(canvas, root):
+     canvas.get_tk_widget().pack()
+
 def _sniff(stringInt, root):
     if not os.path.exists("images"):
         os.mkdir("images")
@@ -159,7 +162,10 @@ def _sniff(stringInt, root):
 
 
     chart_type = FigureCanvasTkAgg(fig,root)
-    chart_type.get_tk_widget().pack()
+#     chart_type.get_tk_widget().pack()
+
+    b4 = tk.Button(root,text = 'Show Graph Preview', command=(lambda e=chart_type: _show(e,root)))
+    b4.pack()
 
     fig = make_subplots(
             rows=2, cols=2,
