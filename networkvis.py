@@ -20,6 +20,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 def _sniff(stringInt, root):
     if not os.path.exists("images"):
         os.mkdir("images")
@@ -124,19 +126,40 @@ def _sniff(stringInt, root):
     sourceX = range(sourceInt)
     destinationX = range(destinationInt)
 
-    plt.subplot(2,1,1)
+    # plt.subplot(2,1,1)
+    # #This will create the bar graph for poulation
+    # pop = plt.bar(srcXData, srcYData)
+    # plt.ylabel('Number of Packets')
+    # plt.xticks(srcIP,srcIP)
+
+    # #The below code will create the second plot.
+    # plt.subplot(2,1,2)
+    # #This will create the bar graph for gdp i.e gdppercapita divided by population.
+    # gdp =plt.bar(dstXData, dstYData)
+    # plt.ylabel('Number of Packets')
+    # plt.xticks(dstIP, dstIP)
+    # plt.show()
+
+    #-------
+    fig = plt.Figure(figsize=(5,4), dpi = 100)
+    ax = fig.add_subplot(211)
     #This will create the bar graph for poulation
-    pop = plt.bar(srcXData, srcYData)
-    plt.ylabel('Number of Packets')
-    plt.xticks(srcIP,srcIP,rotation='vertical')
+    pop = ax.bar(srcXData, srcYData)
+    ax.set_ylabel('Number of Packets')
+    # ax.xticks(srcIP,srcIP)
+    ax.set_xticklabels(srcIP, fontdict=None, minor=False)
 
     #The below code will create the second plot.
-    plt.subplot(2,1,2)
+    ax2 = fig.add_subplot(212)
     #This will create the bar graph for gdp i.e gdppercapita divided by population.
-    gdp =plt.bar(dstXData, dstYData)
-    plt.ylabel('Number of Packets')
-    plt.xticks(dstIP, dstIP, rotation='vertical')
-    plt.show()
+    gdp = ax2.bar(dstXData, dstYData)
+    ax2.set_ylabel('Number of Packets')
+    # ax2.xticks(dstIP, dstIP)
+    ax2.set_xticklabels(dstIP, fontdict=None, minor=False)
+
+
+    chart_type = FigureCanvasTkAgg(fig,root)
+    chart_type.get_tk_widget().pack()
 
     fig = make_subplots(
             rows=2, cols=2,
