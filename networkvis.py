@@ -45,28 +45,55 @@ def _sniff(stringInt, root):
                 tmp = socket.gethostbyaddr(pkt[IP].src)
                 scrap = tmp[0].split(".")[0]
                 info = (srcdata[0].strip(scrap)).strip('.')
-                # srcIP.append(pkt[IP].src)
-                srcIP.append(info)
+                if not info:
+                     srcIP.append(pkt[IP].src)
+                else:
+                     srcIP.append(info)
             except:
-                print("Passing")
+                print("Skipping Non-IPv4 packets")
                 pass
             try:
                 dstdata = socket.gethostbyaddr(pkt[IP].dst)
                 tmp = socket.gethostbyaddr(pkt[IP].dst)
                 scrap = tmp[0].split(".")[0]
                 info = (dstdata[0].strip(scrap)).strip('.')
-                # print(dstdata.strip(scrap))
-                # dstIP.append(pkt[IP].dst)
-                dstIP.append(info)
+                if not info:
+                     dstIP.append(pkt[IP].dst)
+                else:
+                     dstIP.append(info)
             except:
-                print("Passing")
+                print("Skipping Non-IPv4 packets")
                 pass
 
     topSrc=Counter(srcIP).most_common(3)
     topDst=Counter(dstIP).most_common(3)
+    
+    if(len(topSrc) == 3):
+         topSrcMessage= str(topSrc[0][0] + ", "+ topSrc[1][0]+ ", "+ topSrc[2][0])
+    if(len(topDst) == 3):
+         topDstMessage= str(topDst[0][0] + ", "+ topDst[1][0]+ ", "+ topDst[2][0])
+    if(len(topSrc) == 2):
+         topSrcMessage= str(topSrc[0][0] + ", "+ topSrc[1][0])
+    if(len(topDst) == 2):
+         topDstMessage= str(topDst[0][0] + ", "+ topDst[1][0])
+    if(len(topSrc) == 1):
+         topSrcMessage= str(topSrc[0][0])
+    if(len(topDst) == 1):
+         topDstMessage= str(topDst[0][0])
+    if(len(topSrc) == 0):
+         topSrcMessage= "No IP Incoming  captures [might not be IPv4, Try Again]"
+    if(len(topDst) == 0):
+         topDstMessage= "No IP Outgoing captures [might not be IPv4, Try Again]"
 
-    print(topSrc)
-    print(topDst)
+    l1 = tk.Label(root,text = 'Top IP Incoming: ')
+    l1.pack()
+    l1i = tk.Label(root,text =topSrcMessage)
+    l1i.pack()
+
+    l2 = tk.Label(root,text = 'Top IP Outgoing: ')
+    l2.pack()
+    l2o = tk.Label(root, text = topDstMessage)
+    l2o.pack()
 
     srcCnt=Counter()
     dstCnt=Counter()
@@ -145,15 +172,17 @@ if __name__ == '__main__':
 
     w = tk.Label(root, text="Enter the number of packets that you want to sniff.")
     w.pack()
-    x = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2
-    y = (root.winfo_screenheight() - root.winfo_reqheight()) / 2
+   # x = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2
+   # y = (root.winfo_screenheight() - root.winfo_reqheight()) / 2
     # root.geometry("500x500+%d+%d" % (x, y))
-    root.geometry("500x500+400+400")
+   # root.geometry("500x500+400+400")
     root.title = ('NetworkViz')
     ent = tk.Entry(root)
     ent.pack()
     b1 = tk.Button(root,text = 'Sniff', command=(lambda e=ent: _sniff(e,root)))
     b1.pack()
+    b3 = tk.Button(root, text='Quit', command=root.quit)
+    b3.pack()
 
 
     root.mainloop()
