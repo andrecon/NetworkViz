@@ -16,8 +16,9 @@ import time
 import socket
 
 # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-# import matplotlib.pyplot as plt
-# import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
 
 def _sniff(stringInt, root):
     if not os.path.exists("images"):
@@ -70,11 +71,15 @@ def _sniff(stringInt, root):
     srcCnt=Counter()
     dstCnt=Counter()
 
+    sourceInt = 0
+    destinationInt = 0
     for ip in srcIP:
         srcCnt[ip] += 1
+        sourceInt +=1
 
     for ip in dstIP:
         dstCnt[ip] += 1
+        destinationInt += 1
 
 
     srcXData=[]
@@ -89,14 +94,22 @@ def _sniff(stringInt, root):
         dstXData.append(ip)
         dstYData.append(count)
 
-    # fig, ax = plt.subplots()
-    # ax.plot(srcXData, srcYData)
-    # ax.set_title('Source')
+    sourceX = range(sourceInt)
+    destinationX = range(destinationInt)
 
-    # fig, axs = plt.subplots(2)
-    # fig.suptitle('Destination')
-    # axs[0].plot(x, y)
-    # axs[1].plot(x, -y)
+    plt.subplot(2,1,1)
+    #This will create the bar graph for poulation
+    pop = plt.bar(srcXData, srcYData)
+    plt.ylabel('Number of Packets')
+    plt.xticks(srcIP,srcIP,rotation='vertical')
+
+    #The below code will create the second plot.
+    plt.subplot(2,1,2)
+    #This will create the bar graph for gdp i.e gdppercapita divided by population.
+    gdp =plt.bar(dstXData, dstYData)
+    plt.ylabel('Number of Packets')
+    plt.xticks(dstIP, dstIP, rotation='vertical')
+    plt.show()
 
     fig = make_subplots(
             rows=2, cols=2,
