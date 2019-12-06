@@ -25,6 +25,12 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 def _show(canvas, root):
      canvas.get_tk_widget().pack()
 
+def _save(entry, fig, root):
+     # fig.show()
+     title = entry.get()
+     fig.write_image("images/"+ title + ".pdf")
+     # fig.write_image("images/fig1.webp")
+
 def _sniff(stringInt, root):
     if not os.path.exists("images"):
         os.mkdir("images")
@@ -129,21 +135,7 @@ def _sniff(stringInt, root):
     sourceX = range(sourceInt)
     destinationX = range(destinationInt)
 
-    # plt.subplot(2,1,1)
-    # #This will create the bar graph for poulation
-    # pop = plt.bar(srcXData, srcYData)
-    # plt.ylabel('Number of Packets')
-    # plt.xticks(srcIP,srcIP)
 
-    # #The below code will create the second plot.
-    # plt.subplot(2,1,2)
-    # #This will create the bar graph for gdp i.e gdppercapita divided by population.
-    # gdp =plt.bar(dstXData, dstYData)
-    # plt.ylabel('Number of Packets')
-    # plt.xticks(dstIP, dstIP)
-    # plt.show()
-
-    #-------
     fig = plt.Figure(figsize=(5,4), dpi = 100)
     ax = fig.add_subplot(211)
     #This will create the bar graph for poulation
@@ -164,10 +156,11 @@ def _sniff(stringInt, root):
 
 
     chart_type = FigureCanvasTkAgg(fig,root)
-#     chart_type.get_tk_widget().pack()
+
 
     b4 = tk.Button(root,text = 'Show Graph Preview', command=(lambda e=chart_type: _show(e,root)))
     b4.pack()
+
 
     fig = make_subplots(
             rows=2, cols=2,
@@ -184,16 +177,22 @@ def _sniff(stringInt, root):
             row=1, col=2,
         )
 
-    # chart_type = FigureCanvasTkAgg(fig,root)
-    # chart_type.get_tk_widget().pack()
+     # chart_type = FigureCanvasTkAgg(fig,root)
+     # chart_type.get_tk_widget().pack()
 
     fig.update_layout(height=1300, width=1300, title_text="Network Visualization")
-    fig.show()
+
+    saveEnt = tk.Entry(root)
+    saveEnt.pack()
+    b5 = tk.Button(root,text = 'Save Graph', command=(lambda e=saveEnt: _save(e,fig, root)))
+    b5.pack()
+
+     # fig.show()
 
 
-    now = time.strftime("%m%d-%H%M%S")
-    fig.write_image("images/"+ now + ".pdf")
-    fig.write_image("images/fig1.webp")
+     # now = time.strftime("%m%d-%H%M%S")
+     # fig.write_image("images/"+ now + ".pdf")
+     # fig.write_image("images/fig1.webp")
 
 def exit(event):
     root.destroy()
