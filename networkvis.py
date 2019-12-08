@@ -52,6 +52,7 @@ def _sniff(stringInt, root):
     for pkt in packets:
      if IP in pkt:
             try:
+                print(pkt[IP].src)
                 srcdata = socket.gethostbyaddr(pkt[IP].src)
                 tmp = socket.gethostbyaddr(pkt[IP].src)
                 scrap = tmp[0].split(".")[0]
@@ -64,6 +65,7 @@ def _sniff(stringInt, root):
                 print("Skipping Non-IPv4 packets")
                 pass
             try:
+                print(pkt[IP].dst)
                 dstdata = socket.gethostbyaddr(pkt[IP].dst)
                 tmp = socket.gethostbyaddr(pkt[IP].dst)
                 scrap = tmp[0].split(".")[0]
