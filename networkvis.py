@@ -22,6 +22,17 @@ import numpy as np
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+import geoip2.database
+
+
+def info(IP, domain):
+    reader = geoip2.database.Reader('Geolite2-City.mmdb')
+    response = reader.city(IP)
+    lat = response.location.latitude
+    lon = response.location.longitude
+    country = response.country.name
+    thisInfo =  str("-----------------\n"+ "Domain: " + domain + "\n" + "IP Address: " + IP + "\n" + "Location: " + lat + ", " + lon +" - " + country)
+    print(thisInfo)
 
 def _showTopSrc(root, text):
     l1i = tk.Label(root,text =text)
@@ -59,40 +70,52 @@ def _sniff(stringInt, root):
 
     srcIP=[]
     dstIP=[]
+
+    listofIP_src = []
+    listofIP_dst = []
+
     for pkt in packets:
      if IP in pkt:
             try:
-                print(pkt[IP].src)
+                #print(pkt[IP].src)
                 srcdata = socket.gethostbyaddr(pkt[IP].src)
                 tmp = socket.gethostbyaddr(pkt[IP].src)
                 scrap = tmp[0].split(".")[0]
                 info = (srcdata[0].strip(scrap)).strip('.')
                 if not info:
+                     listofIP_src.append(pkt[IP].src)
                      srcIP.append(pkt[IP].src)
                 else:
+                     listofIP_src.append(pkt[IP].src)
                      srcIP.append(info)
             except:
                 print("Skipping Non-IPv4 packets")
                 pass
             try:
-                print(pkt[IP].dst)
+                #print(pkt[IP].dst)
                 dstdata = socket.gethostbyaddr(pkt[IP].dst)
                 tmp = socket.gethostbyaddr(pkt[IP].dst)
                 scrap = tmp[0].split(".")[0]
                 info = (dstdata[0].strip(scrap)).strip('.')
                 if not info:
+                     listofIP_dst.append(pkt[IP].dst)
                      dstIP.append(pkt[IP].dst)
                 else:
+                     listofIP_dst.append(pkt[IP].dst)
                      dstIP.append(info)
             except:
                 print("Skipping Non-IPv4 packets")
                 pass
 
+    topSrcIP=Counter(listofIP_src).most_common(3)
+    topDstIP=Counter(listofIP_dst).most_common(3)
     topSrc=Counter(srcIP).most_common(3)
     topDst=Counter(dstIP).most_common(3)
     
     if(len(topSrc) == 3):
-         topSrcMessage= str(topSrc[0][0] + "\n"+ topSrc[1][0]+ "\n"+ topSrc[2][0])
+        info(topSrcIP[0][0],topSrc[0][0])
+       # print(info(topSrcIP[0][0],topSrc[0][0]))
+       # topSrcMessage= str(info(topSrcIP[0][0], topSrc[0][0]) + "\n"+ info(topSrcIP[1][0], topSrc[1][0]) + "\n"+ info(topSrcIP[2][0], topSrc[2][0]))
     if(len(topDst) == 3):
          topDstMessage= str(topDst[0][0] + "\n"+ topDst[1][0]+ "\n"+ topDst[2][0])
     if(len(topSrc) == 2):
