@@ -25,14 +25,14 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import geoip2.database
 
 
-def info(IP, domain):
+def _info(IP, domain):
     reader = geoip2.database.Reader('Geolite2-City.mmdb')
     response = reader.city(IP)
     lat = response.location.latitude
     lon = response.location.longitude
     country = response.country.name
-    thisInfo =  str("-----------------\n"+ "Domain: " + domain + "\n" + "IP Address: " + IP + "\n" + "Location: " + lat + ", " + lon +" - " + country)
-    print(thisInfo)
+    thisInfo =  "-----------------\n"+ "Domain: " + str(domain) + "\n" + "IP Address: " + str(IP) + "\n" + "Location: " + str(lat) + ", " + str(lon) +" - " + str(country) + "\n-----------------"
+    return thisInfo
 
 def _showTopSrc(root, text):
     l1i = tk.Label(root,text =text)
@@ -111,25 +111,42 @@ def _sniff(stringInt, root):
     topDstIP=Counter(listofIP_dst).most_common(3)
     topSrc=Counter(srcIP).most_common(3)
     topDst=Counter(dstIP).most_common(3)
-    
+
+
     if(len(topSrc) == 3):
-        info(topSrcIP[0][0],topSrc[0][0])
-       # print(info(topSrcIP[0][0],topSrc[0][0]))
-       # topSrcMessage= str(info(topSrcIP[0][0], topSrc[0][0]) + "\n"+ info(topSrcIP[1][0], topSrc[1][0]) + "\n"+ info(topSrcIP[2][0], topSrc[2][0]))
+        data1 = _info(topSrcIP[0][0],topSrc[0][0])
+        data2 = _info(topSrcIP[1][0],topSrc[1][0])
+        data3 = _info(topSrcIP[2][0],topSrc[2][0])
+        data = data1 + "\n"+ data2 + "\n"+ data3
+        topSrcMessage = data
     if(len(topDst) == 3):
-         topDstMessage= str(topDst[0][0] + "\n"+ topDst[1][0]+ "\n"+ topDst[2][0])
+        data1 = _info(topDstIP[0][0],topDst[0][0])
+        data2 = _info(topDstIP[1][0],topDst[1][0])
+        data3 = _info(topDstIP[2][0],topDst[2][0])
+        data = data1 + "\n"+ data2 + "\n"+ data3
+        topDstMessage = data
     if(len(topSrc) == 2):
-         topSrcMessage= str(topSrc[0][0] + "\n"+ topSrc[1][0])
+        data1 = _info(topSrcIP[0][0],topSrc[0][0])
+        data2 = _info(topSrcIP[1][0],topSrc[1][0])
+        data = data1 + "\n"+ data2
+        topSrcMessage = data
     if(len(topDst) == 2):
-         topDstMessage= str(topDst[0][0] + "\n"+ topDst[1][0])
+        data1 = _info(topDstIP[0][0],topDst[0][0])
+        data2 = _info(topDstIP[1][0],topDst[1][0])
+        data = data1 + "\n"+ data2
+        topDstMessage = data
     if(len(topSrc) == 1):
-         topSrcMessage= str(topSrc[0][0])
+        data1 = _info(topSrcIP[0][0],topSrc[0][0])
+        data = data1
+        topSrcMessage = data
     if(len(topDst) == 1):
-         topDstMessage= str(topDst[0][0])
+        data1 = _info(topDstIP[0][0],topDst[0][0])
+        data = data1
+        topDstMessage = data
     if(len(topSrc) == 0):
-         topSrcMessage= "No Incoming IP packets [might not be IPv4, Try Again]"
+        topSrcMessage= "No Incoming IP packets [might not be IPv4, Try Again]"
     if(len(topDst) == 0):
-         topDstMessage= "No Outgoing IP packets [might not be IPv4, Try Again]"
+        topDstMessage= "No Outgoing IP packets [might not be IPv4, Try Again]"
 
     b5 = tk.Button(root,text = 'Top Incoming', command=(lambda e=root: _showTopSrc(e,topSrcMessage)))
     b5.grid(row=2)
@@ -249,4 +266,20 @@ if __name__ == '__main__':
     root.bind('<Escape>', exit)
 
 
+    # scrollbar = tk.Scrollbar(root)
+    # scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+    # listbox = tk.Listbox(root, yscrollcommand=scrollbar.set)
+    # for i in range(1000):
+    #     listbox.insert(tk.END, str(i))
+    # listbox.pack(side=tk.LEFT, fill=tk.BOTH)
+
+    # scrollbar.config(command=listbox.yview)
+
+    # while True:
+    #     try:
+    #         root.mainloop()
+    #         break
+    #     except UnicodeDecodeError:
+    #         pass
     root.mainloop()
