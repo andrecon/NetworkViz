@@ -22,8 +22,18 @@ import numpy as np
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+
+def _showTopSrc(root, text):
+    l1i = tk.Label(root,text =text)
+    l1i.grid(row=3)
+
+def _showTopDst(root, text):
+    l2o = tk.Label(root, text = text)
+    l2o.grid(row=5)
+
+
 def _show(canvas, root):
-     canvas.get_tk_widget().pack()
+     canvas.get_tk_widget().grid(row=8)
 
 def _save(entry, fig, root):
      # fig.show()
@@ -82,13 +92,13 @@ def _sniff(stringInt, root):
     topDst=Counter(dstIP).most_common(3)
     
     if(len(topSrc) == 3):
-         topSrcMessage= str(topSrc[0][0] + ", "+ topSrc[1][0]+ ", "+ topSrc[2][0])
+         topSrcMessage= str(topSrc[0][0] + "\n"+ topSrc[1][0]+ "\n"+ topSrc[2][0])
     if(len(topDst) == 3):
-         topDstMessage= str(topDst[0][0] + ", "+ topDst[1][0]+ ", "+ topDst[2][0])
+         topDstMessage= str(topDst[0][0] + "\n"+ topDst[1][0]+ "\n"+ topDst[2][0])
     if(len(topSrc) == 2):
-         topSrcMessage= str(topSrc[0][0] + ", "+ topSrc[1][0])
+         topSrcMessage= str(topSrc[0][0] + "\n"+ topSrc[1][0])
     if(len(topDst) == 2):
-         topDstMessage= str(topDst[0][0] + ", "+ topDst[1][0])
+         topDstMessage= str(topDst[0][0] + "\n"+ topDst[1][0])
     if(len(topSrc) == 1):
          topSrcMessage= str(topSrc[0][0])
     if(len(topDst) == 1):
@@ -98,15 +108,10 @@ def _sniff(stringInt, root):
     if(len(topDst) == 0):
          topDstMessage= "No Outgoing IP packets [might not be IPv4, Try Again]"
 
-    l1 = tk.Label(root,text = 'Top IP Incoming: ')
-    l1.pack()
-    l1i = tk.Label(root,text =topSrcMessage)
-    l1i.pack()
-
-    l2 = tk.Label(root,text = 'Top IP Outgoing: ')
-    l2.pack()
-    l2o = tk.Label(root, text = topDstMessage)
-    l2o.pack()
+    b5 = tk.Button(root,text = 'Top Incoming', command=(lambda e=root: _showTopSrc(e,topSrcMessage)))
+    b5.grid(row=2)
+    b6 = tk.Button(root,text = 'Top Outgoing', command=(lambda e=root: _showTopDst(e,topDstMessage)))
+    b6.grid(row=4)
 
     srcCnt=Counter()
     dstCnt=Counter()
@@ -160,8 +165,8 @@ def _sniff(stringInt, root):
     chart_type = FigureCanvasTkAgg(fig,root)
 
 
-    b4 = tk.Button(root,text = 'Show Graph Preview', command=(lambda e=chart_type: _show(e,root)))
-    b4.pack()
+    b4 = tk.Button(root,text = 'Preview', command=(lambda e=chart_type: _show(e,root)))
+    b4.grid(row=7)
 
 
     fig = make_subplots(
@@ -185,9 +190,9 @@ def _sniff(stringInt, root):
     fig.update_layout(height=1300, width=1300, title_text="Network Visualization")
 
     saveEnt = tk.Entry(root)
-    saveEnt.pack()
+    saveEnt.grid(row=6, column=0)
     b5 = tk.Button(root,text = 'Save Graph', command=(lambda e=saveEnt: _save(e,fig, root)))
-    b5.pack()
+    b5.grid(row=6, column=1)
 
      # fig.show()
 
@@ -205,19 +210,19 @@ if __name__ == '__main__':
     # root.configure(background='black')
 
 
-    w = tk.Label(root, text="Enter the number of packets that you want to sniff.")
-    w.pack()
+    w = tk.Label(root, text="Num packets")
+    w.grid(row=0)
    # x = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2
    # y = (root.winfo_screenheight() - root.winfo_reqheight()) / 2
     # root.geometry("500x500+%d+%d" % (x, y))
    # root.geometry("500x500+400+400")
     ent = tk.Entry(root)
-    ent.pack()
+    ent.grid(row=1, column=0)
     b1 = tk.Button(root,text = 'Sniff', command=(lambda e=ent: _sniff(e,root)))
-    b1.pack()
+    b1.grid(row=1, column=1)
 #    root.bind('<Return>', (lambda e=ent: _sniff(e,root)))
     b3 = tk.Button(root, text='Quit', command=root.quit)
-    b3.pack()
+    b3.grid(row=100)
     root.bind('<Escape>', exit)
 
 
